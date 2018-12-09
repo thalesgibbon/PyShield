@@ -14,7 +14,7 @@ class SimulaRequest(object):
 
         self.url = f"https://maps.googleapis.com/maps/api/directions/json?origin={self.origem}&destination={self.destino}&mode={self.mode}&key={self.chave}"
 
-    def Main(self):
+    def Reload(self):
         # falha na rede, fazer 10 tentativas
         for n in range(10):
             r = requests.get(url=self.url)
@@ -41,10 +41,6 @@ class SimulaRequest(object):
 
             dicio_ruas[id] = [distancia, start_loc_lat, start_loc_lng, end_loc_lat, end_loc_lng]
 
-        return pd.DataFrame.from_dict(dicio_ruas, orient='index', columns=cols)
+        df = pd.DataFrame.from_dict(dicio_ruas, orient='index', columns=cols)
 
-
-orig = "Rua Dr. Alfredo Ellis, 50 - Bela Vista, Sao Paulo - SP"
-dest = "Avenida Brigadeiro Luis Antonio, 1272 Sao Paulo - SP, Brasil"
-_df = SimulaRequest(_origem=orig, _destino=dest)
-_df.to_pickle(f"{path_data}\#request_gmaps.pkl")
+        df.to_pickle(f"{path_data}\#request_gmaps.pkl")
